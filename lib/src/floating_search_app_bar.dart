@@ -12,6 +12,9 @@ typedef OnFocusChangedCallback = void Function(bool isFocused);
 /// This can be considered the base Widget for the full
 /// [FloatingSearchBar].
 class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
+  /// to show the cursor or not
+  final bool showCursor;
+
   /// The widget displayed below the [FloatingSearchAppBar]
   final Widget? body;
 
@@ -155,6 +158,7 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
     this.titleStyle,
     this.brightness,
     this.bottom,
+    this.showCursor = true,
     this.alwaysOpened = false,
     this.clearQueryOnClose = true,
     this.automaticallyImplyDrawerHamburger = true,
