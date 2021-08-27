@@ -723,43 +723,46 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
       shadowColor: style.shadowColor,
     );
 
-    return SizedBox.expand(
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: <Widget>[
-          if (transition.isBodyInsideSearchBar && v > 0.0)
-            Positioned.fill(
-              child: Padding(
-                padding: EdgeInsets.only(top: style.height),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: _buildBody(),
+    return MouseRegion(
+      cursor: SystemMouseCursors.text,
+      child: SizedBox.expand(
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: <Widget>[
+            if (transition.isBodyInsideSearchBar && v > 0.0)
+              Positioned.fill(
+                child: Padding(
+                  padding: EdgeInsets.only(top: style.height),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: _buildBody(),
+                  ),
+                ),
+              ),
+            Material(
+              elevation: transition.lerpInnerElevation(),
+              shadowColor: style.shadowColor,
+              child: Container(
+                height: style.height,
+                color: transition.lerpBackgroundColor(),
+                alignment: Alignment.topCenter,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: transition.lerpInnerWidth(),
+                      child: textField,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: transition.buildDivider(),
+                    ),
+                  ],
                 ),
               ),
             ),
-          Material(
-            elevation: transition.lerpInnerElevation(),
-            shadowColor: style.shadowColor,
-            child: Container(
-              height: style.height,
-              color: transition.lerpBackgroundColor(),
-              alignment: Alignment.topCenter,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    width: transition.lerpInnerWidth(),
-                    child: textField,
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: transition.buildDivider(),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
