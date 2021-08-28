@@ -337,6 +337,9 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   /// this `FloatingSearchBar`.
   final ScrollController? scrollController;
 
+  /// To show the cursor in the textfield or not
+  final bool showCursor;
+
   /// The [EdgeInsets] of the [SingleChildScrollView] holding the expandable body of
   /// this `FloatingSearchBar`.
   final EdgeInsets scrollPadding;
@@ -390,6 +393,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
     this.physics,
     this.scrollController,
     this.scrollPadding = const EdgeInsets.symmetric(vertical: 16),
+    this.showCursor = true,
   }) : super(key, implicitDuration, implicitCurve);
 
   @override
@@ -679,6 +683,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
 
   Widget _buildInnerBar() {
     final textField = FloatingSearchAppBar(
+      showCursor: widget.showCursor,
       body: null,
       key: barKey,
       height: 1000,
