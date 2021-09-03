@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
-import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +17,7 @@ void main() {
     ),
   );
 
-  runApp(MyApp());
-
-  /* runApp(
+  runApp(
     MaterialApp(
       title: 'Material Floating Search Bar Example',
       debugShowCheckedModeBanner: false,
@@ -41,7 +37,7 @@ void main() {
         ),
       ),
     ),
-  ); */
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -53,38 +49,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TestPage(),
-    );
-  }
-}
-
-class TestPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FloatingSearchBar(
-        transitionCurve: Curves.easeInOutCubic,
-        transition: CircularFloatingSearchBarTransition(),
-        physics: const BouncingScrollPhysics(),
-        builder: (context, _) => buildBody(),
-      ),
-    );
-  }
-
-  Widget buildBody() {
-    final time = DateTime.now();
-    print('BuildBody at ${time.second}:${time.millisecond}');
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Material(
-        child: Column(
-          children: List.generate(100, (index) => index.toString())
-              .map((e) => ListTile(
-                    title: Text(e),
-                  ))
-              .toList(),
-        ),
-      ),
+      home: Home(),
     );
   }
 }
@@ -154,6 +119,7 @@ class _HomeState extends State<Home> {
         onQueryChanged: model.onQueryChanged,
         scrollPadding: EdgeInsets.zero,
         transition: CircularFloatingSearchBarTransition(spacing: 16),
+        isScrollControlled: true,
         builder: (context, _) => buildExpandableBody(model),
         body: buildBody(),
       ),
@@ -179,31 +145,19 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildExpandableBody(SearchModel model) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Material(
-        color: Colors.white,
-        elevation: 4.0,
-        borderRadius: BorderRadius.circular(8),
-        child: ImplicitlyAnimatedList<Place>(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          items: model.suggestions.take(6).toList(),
-          areItemsTheSame: (a, b) => a == b,
-          itemBuilder: (context, animation, place, i) {
-            return SizeFadeTransition(
-              animation: animation,
-              child: buildItem(context, place),
-            );
-          },
-          updateItemBuilder: (context, animation, place) {
-            return FadeTransition(
-              opacity: animation,
-              child: buildItem(context, place),
-            );
-          },
-        ),
-      ),
+    return ListView.builder(
+      itemCount: 200,
+      itemBuilder: (context, index) {
+        print('build $index');
+
+        return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Text(
+            '$index',
+          ),
+        );
+      },
     );
   }
 
