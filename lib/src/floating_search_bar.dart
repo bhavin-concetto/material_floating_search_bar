@@ -32,6 +32,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   /// to scroll events (i.e. hide from view when a [Scrollable]
   /// is being scrolled down and show it again when scrolled up).
   final Widget? body;
+
   // * --- Style properties --- *
 
   /// The color used for elements such as the progress
@@ -343,58 +344,74 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   /// The [EdgeInsets] of the [SingleChildScrollView] holding the expandable body of
   /// this `FloatingSearchBar`.
   final EdgeInsets scrollPadding;
-  const FloatingSearchBar({
-    Key? key,
-    Duration implicitDuration = const Duration(milliseconds: 600),
-    Curve implicitCurve = Curves.linear,
-    this.body,
-    this.accentColor,
-    this.backgroundColor,
-    this.shadowColor = Colors.black87,
-    this.iconColor,
-    this.backdropColor,
-    this.margins,
-    this.padding,
-    this.insets,
-    this.height = 48.0,
-    this.elevation = 4.0,
-    this.width,
-    this.openWidth,
-    this.axisAlignment = 0.0,
-    this.openAxisAlignment,
-    this.border,
-    this.borderRadius = const BorderRadius.all(Radius.circular(4)),
-    this.hintStyle,
-    this.queryStyle,
-    this.clearQueryOnClose = true,
-    this.automaticallyImplyDrawerHamburger = true,
-    this.automaticallyImplyBackButton = true,
-    this.closeOnBackdropTap = true,
-    this.progress = false,
-    this.transitionDuration = const Duration(milliseconds: 500),
-    this.transitionCurve = Curves.ease,
-    this.debounceDelay = Duration.zero,
-    this.title,
-    this.hint = 'Search...',
-    this.actions,
-    this.leadingActions,
-    this.onQueryChanged,
-    this.onSubmitted,
-    this.onFocusChanged,
-    this.transition,
-    required this.builder,
-    this.controller,
-    this.textInputAction = TextInputAction.search,
-    this.textInputType = TextInputType.text,
-    this.autocorrect = true,
-    this.toolbarOptions,
-    this.showAfter,
-    this.isScrollControlled = true,
-    this.physics,
-    this.scrollController,
-    this.scrollPadding = const EdgeInsets.symmetric(vertical: 16),
-    this.showCursor = true,
-  }) : super(key, implicitDuration, implicitCurve);
+
+  final Widget? leadingWidget;
+
+  final BoxDecoration? inputDecoration;
+
+  final EdgeInsets? marginContainer;
+
+  final EdgeInsets? paddingContainer;
+
+  final Widget? endWidget;
+
+  const FloatingSearchBar(
+      {Key? key,
+      Duration implicitDuration = const Duration(milliseconds: 600),
+      Curve implicitCurve = Curves.linear,
+      this.body,
+      this.accentColor,
+      this.backgroundColor,
+      this.shadowColor = Colors.black87,
+      this.iconColor,
+      this.backdropColor,
+      this.margins,
+      this.padding,
+      this.insets,
+      this.height = 48.0,
+      this.elevation = 4.0,
+      this.width,
+      this.openWidth,
+      this.axisAlignment = 0.0,
+      this.openAxisAlignment,
+      this.border,
+      this.borderRadius = const BorderRadius.all(Radius.circular(4)),
+      this.hintStyle,
+      this.queryStyle,
+      this.clearQueryOnClose = true,
+      this.automaticallyImplyDrawerHamburger = true,
+      this.automaticallyImplyBackButton = true,
+      this.closeOnBackdropTap = true,
+      this.progress = false,
+      this.transitionDuration = const Duration(milliseconds: 500),
+      this.transitionCurve = Curves.ease,
+      this.debounceDelay = Duration.zero,
+      this.title,
+      this.hint = 'Search...',
+      this.actions,
+      this.leadingActions,
+      this.onQueryChanged,
+      this.onSubmitted,
+      this.onFocusChanged,
+      this.transition,
+      required this.builder,
+      this.controller,
+      this.textInputAction = TextInputAction.search,
+      this.textInputType = TextInputType.text,
+      this.autocorrect = true,
+      this.toolbarOptions,
+      this.showAfter,
+      this.isScrollControlled = true,
+      this.physics,
+      this.scrollController,
+      this.scrollPadding = const EdgeInsets.symmetric(vertical: 16),
+      this.showCursor = true,
+      this.leadingWidget,
+      this.inputDecoration,
+      this.marginContainer,
+      this.paddingContainer,
+      this.endWidget})
+      : super(key, implicitDuration, implicitCurve);
 
   @override
   FloatingSearchBarState createState() => FloatingSearchBarState();
@@ -404,9 +421,10 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
   }
 }
 
-class FloatingSearchBarState
-    extends ImplicitlyAnimatedWidgetState<FloatingSearchBarStyle, FloatingSearchBar> {
+class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
+    FloatingSearchBarStyle, FloatingSearchBar> {
   final GlobalKey<FloatingSearchAppBarState> barKey = GlobalKey();
+
   FloatingSearchAppBarState? get barState => barKey.currentState;
 
   late final _controller = AnimationController(
@@ -418,7 +436,8 @@ class FloatingSearchBarState
       }
     });
 
-  late CurvedAnimation animation = CurvedAnimation(parent: _controller, curve: curve);
+  late CurvedAnimation animation =
+      CurvedAnimation(parent: _controller, curve: curve);
 
   late final _translateController = AnimationController(
     vsync: this,
@@ -442,19 +461,24 @@ class FloatingSearchBarState
   FloatingSearchBarStyle get style => value;
 
   Widget? get title => widget.title;
+
   String get hint => widget.hint?.toString() ?? '';
 
   Curve get curve => widget.transitionCurve;
+
   Duration get duration => widget.transitionDuration;
+
   Duration get queryCallbackDelay => widget.debounceDelay;
 
   bool get isOpen => barState?.isOpen ?? false;
+
   set isOpen(bool value) {
     if (value != isOpen) barState?.isOpen = value;
     value ? _controller.forward() : _controller.reverse();
   }
 
   bool get isVisible => _translateController.isDismissed;
+
   set isVisible(bool value) {
     if (value == isVisible) return;
 
@@ -469,9 +493,11 @@ class FloatingSearchBarState
   }
 
   double _offset = 0.0;
+
   double get offset => _offset;
 
   double get v => animation.value;
+
   bool get isAnimating => _controller.isAnimating;
 
   @override
@@ -508,7 +534,8 @@ class FloatingSearchBarState
       transition.searchBar = this;
     }
 
-    if (widget.scrollController != null && widget.scrollController != _scrollController) {
+    if (widget.scrollController != null &&
+        widget.scrollController != _scrollController) {
       _scrollController = widget.scrollController!;
     }
 
@@ -518,9 +545,11 @@ class FloatingSearchBarState
   void _assignController() => widget.controller?._searchBarState = this;
 
   void show() => isVisible = true;
+
   void hide() => isVisible = false;
 
   void open() => isOpen = true;
+
   void close() => isOpen = false;
 
   Future<bool> _onPop() async {
@@ -572,7 +601,8 @@ class FloatingSearchBarState
 
         final delta = pixel - _lastPixel;
 
-        _translateController.value += delta / (style.height + style.margins.top);
+        _translateController.value +=
+            delta / (style.height + style.margins.top);
         _lastPixel = pixel;
       }
     }
@@ -668,7 +698,8 @@ class FloatingSearchBarState
     return AnimatedAlign(
       duration: isAnimating ? duration : Duration.zero,
       curve: widget.transitionCurve,
-      alignment: Alignment(isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
+      alignment: Alignment(
+          isOpen ? style.openAxisAlignment : style.axisAlignment, -1.0),
       child: transition.isBodyInsideSearchBar
           ? bar
           : Column(
@@ -682,44 +713,49 @@ class FloatingSearchBarState
 
   Widget _buildInnerBar() {
     final textField = FloatingSearchAppBar(
-      showCursor: widget.showCursor,
-      body: null,
-      key: barKey,
-      height: 1000,
-      elevation: 0.0,
-      controller: widget.controller,
-      color: transition.lerpBackgroundColor(),
-      onFocusChanged: (isFocused) {
-        isOpen = isFocused;
-        widget.onFocusChanged?.call(isFocused);
-      },
-      implicitDuration: widget.duration,
-      implicitCurve: widget.curve,
-      title: widget.title,
-      actions: widget.actions,
-      leadingActions: widget.leadingActions,
-      autocorrect: widget.autocorrect,
-      clearQueryOnClose: widget.clearQueryOnClose,
-      debounceDelay: widget.debounceDelay,
-      hint: widget.hint,
-      onQueryChanged: widget.onQueryChanged,
-      onSubmitted: widget.onSubmitted,
-      progress: widget.progress,
-      automaticallyImplyDrawerHamburger: widget.automaticallyImplyDrawerHamburger,
-      automaticallyImplyBackButton: widget.automaticallyImplyBackButton,
-      toolbarOptions: widget.toolbarOptions,
-      transitionDuration: widget.transitionDuration,
-      transitionCurve: widget.transitionCurve,
-      textInputAction: widget.textInputAction,
-      textInputType: widget.textInputType,
-      accentColor: widget.accentColor,
-      hintStyle: widget.hintStyle,
-      iconColor: widget.iconColor,
-      insets: style.insets,
-      padding: style.padding,
-      titleStyle: widget.queryStyle,
-      shadowColor: style.shadowColor,
-    );
+        showCursor: widget.showCursor,
+        body: null,
+        key: barKey,
+        height: 1000,
+        elevation: 0.0,
+        controller: widget.controller,
+        color: transition.lerpBackgroundColor(),
+        onFocusChanged: (isFocused) {
+          isOpen = isFocused;
+          widget.onFocusChanged?.call(isFocused);
+        },
+        implicitDuration: widget.duration,
+        implicitCurve: widget.curve,
+        title: widget.title,
+        actions: widget.actions,
+        leadingActions: widget.leadingActions,
+        autocorrect: widget.autocorrect,
+        clearQueryOnClose: widget.clearQueryOnClose,
+        debounceDelay: widget.debounceDelay,
+        hint: widget.hint,
+        onQueryChanged: widget.onQueryChanged,
+        onSubmitted: widget.onSubmitted,
+        progress: widget.progress,
+        automaticallyImplyDrawerHamburger:
+            widget.automaticallyImplyDrawerHamburger,
+        automaticallyImplyBackButton: widget.automaticallyImplyBackButton,
+        toolbarOptions: widget.toolbarOptions,
+        transitionDuration: widget.transitionDuration,
+        transitionCurve: widget.transitionCurve,
+        textInputAction: widget.textInputAction,
+        textInputType: widget.textInputType,
+        accentColor: widget.accentColor,
+        hintStyle: widget.hintStyle,
+        iconColor: widget.iconColor,
+        insets: style.insets,
+        padding: style.padding,
+        titleStyle: widget.queryStyle,
+        shadowColor: style.shadowColor,
+        leadingWidget: widget.leadingWidget,
+        inputDecoration: widget.inputDecoration,
+        marginContainer: widget.marginContainer,
+        paddingContainer: widget.paddingContainer,
+        endWidget: widget.endWidget);
 
     return SizedBox.expand(
       child: Stack(
@@ -828,20 +864,23 @@ class FloatingSearchBarState
       maxWidth: widget.width,
       openMaxWidth: widget.openWidth,
       axisAlignment: widget.axisAlignment ?? 0.0,
-      openAxisAlignment: widget.openAxisAlignment ?? widget.axisAlignment ?? 0.0,
+      openAxisAlignment:
+          widget.openAxisAlignment ?? widget.axisAlignment ?? 0.0,
       backgroundColor: widget.backgroundColor ?? theme.cardColor,
       shadowColor: widget.shadowColor ?? Colors.black45,
-      backdropColor:
-          widget.backdropColor ?? widget.transition?.backdropColor ?? Colors.black26,
+      backdropColor: widget.backdropColor ??
+          widget.transition?.backdropColor ??
+          Colors.black26,
       border: widget.border ?? BorderSide.none,
       borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
       margins: (widget.margins ??
-              EdgeInsets.fromLTRB(8, MediaQuery.of(context).viewPadding.top + 6, 8, 0))
+              EdgeInsets.fromLTRB(
+                  8, MediaQuery.of(context).viewPadding.top + 6, 8, 0))
           .resolve(direction),
       padding: widget.padding?.resolve(direction) ??
           const EdgeInsets.symmetric(horizontal: 12),
-      insets:
-          widget.insets?.resolve(direction) ?? const EdgeInsets.symmetric(horizontal: 8),
+      insets: widget.insets?.resolve(direction) ??
+          const EdgeInsets.symmetric(horizontal: 8),
     );
   }
 

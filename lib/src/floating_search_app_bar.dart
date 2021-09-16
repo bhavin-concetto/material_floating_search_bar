@@ -139,48 +139,64 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
 
   /// {@macro floating_search_bar.toolbarOptions}
   final ToolbarOptions? toolbarOptions;
-  const FloatingSearchAppBar({
-    Key? key,
-    Duration implicitDuration = const Duration(milliseconds: 500),
-    Curve implicitCurve = Curves.linear,
-    required this.body,
-    this.accentColor,
-    this.color,
-    this.colorOnScroll,
-    this.shadowColor,
-    this.iconColor,
-    this.padding,
-    this.insets,
-    this.height = 56.0,
-    this.elevation = 0.0,
-    this.liftOnScrollElevation = 4.0,
-    this.hintStyle,
-    this.titleStyle,
-    this.brightness,
-    this.bottom,
-    this.showCursor = true,
-    this.alwaysOpened = false,
-    this.clearQueryOnClose = true,
-    this.automaticallyImplyDrawerHamburger = true,
-    this.hideKeyboardOnDownScroll = false,
-    this.automaticallyImplyBackButton = true,
-    this.progress = 0.0,
-    this.transitionDuration = const Duration(milliseconds: 500),
-    this.transitionCurve = Curves.easeOut,
-    this.debounceDelay = Duration.zero,
-    this.title,
-    this.hint = 'Search...',
-    this.actions,
-    this.leadingActions,
-    this.onQueryChanged,
-    this.onSubmitted,
-    this.onFocusChanged,
-    this.controller,
-    this.textInputAction = TextInputAction.search,
-    this.textInputType = TextInputType.text,
-    this.autocorrect = true,
-    this.toolbarOptions,
-  })  : assert(progress == null || (progress is num || progress is bool)),
+
+  final Widget? leadingWidget;
+
+  final BoxDecoration? inputDecoration;
+
+  final EdgeInsets? marginContainer;
+
+  final EdgeInsets? paddingContainer;
+
+  final Widget? endWidget;
+
+  const FloatingSearchAppBar(
+      {Key? key,
+      Duration implicitDuration = const Duration(milliseconds: 500),
+      Curve implicitCurve = Curves.linear,
+      required this.body,
+      this.accentColor,
+      this.color,
+      this.colorOnScroll,
+      this.shadowColor,
+      this.iconColor,
+      this.padding,
+      this.insets,
+      this.height = 56.0,
+      this.elevation = 0.0,
+      this.liftOnScrollElevation = 4.0,
+      this.hintStyle,
+      this.titleStyle,
+      this.brightness,
+      this.bottom,
+      this.showCursor = true,
+      this.alwaysOpened = false,
+      this.clearQueryOnClose = true,
+      this.automaticallyImplyDrawerHamburger = true,
+      this.hideKeyboardOnDownScroll = false,
+      this.automaticallyImplyBackButton = true,
+      this.progress = 0.0,
+      this.transitionDuration = const Duration(milliseconds: 500),
+      this.transitionCurve = Curves.easeOut,
+      this.debounceDelay = Duration.zero,
+      this.title,
+      this.hint = 'Search...',
+      this.actions,
+      this.leadingActions,
+      this.onQueryChanged,
+      this.onSubmitted,
+      this.onFocusChanged,
+      this.controller,
+      this.textInputAction = TextInputAction.search,
+      this.textInputType = TextInputType.text,
+      this.autocorrect = true,
+      this.toolbarOptions,
+      this.leadingWidget,
+      this.inputDecoration,
+      this.marginContainer,
+      this.paddingContainer,
+      this.endWidget})
+      : assert(progress == null || (progress is num || progress is bool)),
         super(key, implicitDuration, implicitCurve);
 
   static FloatingSearchAppBarState? of(BuildContext context) {
@@ -223,31 +239,36 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
     curve: Curves.easeInOutCubic,
   );
 
-  late final _input = TextController()
-    ..addListener(() {
-      if (_input.text != queryNotifer.value) {
-        queryNotifer.value = _input.text;
+  late final _input = TextController();
 
-        _handler.post(
-          // Do not add a delay when the query is empty.
-          _input.text.isEmpty ? Duration.zero : widget.debounceDelay,
-          () => widget.onQueryChanged?.call(_input.text),
-        );
-      }
-    });
+  // ..addListener(() {
+  //   if (_input.text != queryNotifer.value) {
+  //     queryNotifer.value = _input.text;
+  //
+  //     _handler.post(
+  //       // Do not add a delay when the query is empty.
+  //       _input.text.isEmpty ? Duration.zero : widget.debounceDelay,
+  //           () => widget.onQueryChanged?.call(_input.text),
+  //     );
+  //   }
+  // });
 
   bool _wasUnfocusedOnScroll = false;
 
   bool _isAtTop = true;
+
   bool get isAtTop => _isAtTop;
 
   bool get isAppBar => widget.body != null;
+
   bool get isAlwaysOpened => widget.alwaysOpened;
+
   double get _statusBarHeight => MediaQuery.of(context).viewPadding.top;
 
   Duration get transitionDuration => widget.transitionDuration;
 
   FloatingSearchAppBarStyle get style => value;
+
   Color get backgroundColor => Color.lerp(
         style.backgroundColor,
         style.colorOnScroll,
@@ -255,6 +276,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
       )!;
 
   bool get hasActions => actions.isNotEmpty;
+
   List<Widget> get actions {
     final actions = widget.actions ?? [FloatingSearchBarAction.searchToClear()];
     final showHamburger = widget.automaticallyImplyDrawerHamburger &&
@@ -268,6 +290,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   bool get hasleadingActions => leadingActions.isNotEmpty;
+
   List<Widget> get leadingActions {
     final actions = widget.leadingActions ?? const <Widget>[];
     final showHamburger = widget.automaticallyImplyDrawerHamburger &&
@@ -275,7 +298,9 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
 
     Widget? leading;
     if (showHamburger) {
-      leading = FloatingSearchBarAction.hamburgerToBack();
+      leading = FloatingSearchBarAction.hamburgerToBack(
+        child: widget.leadingWidget,
+      );
     } else if (widget.automaticallyImplyBackButton &&
         (Navigator.canPop(context) || widget.body != null)) {
       leading = FloatingSearchBarAction.back(
@@ -287,7 +312,9 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   bool _isOpen = false;
+
   bool get isOpen => _isOpen;
+
   set isOpen(bool value) {
     if (value) {
       () async {
@@ -314,14 +341,27 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   bool get hasFocus => _input.hasFocus;
+
   set hasFocus(bool value) => value ? focus() : unfocus();
 
   String get query => _input.text;
+
   set query(String value) => _input.text = value;
 
   @override
   void initState() {
     super.initState();
+    _input.addListener(() {
+      if (_input.text != queryNotifer.value) {
+        queryNotifer.value = _input.text;
+
+        _handler.post(
+          // Do not add a delay when the query is empty.
+          _input.text.isEmpty ? Duration.zero : widget.debounceDelay,
+          () => widget.onQueryChanged?.call(_input.text),
+        );
+      }
+    });
     if (isAlwaysOpened) {
       _isOpen = true;
       postFrame(_input.requestFocus);
@@ -354,6 +394,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   }
 
   void open() => isOpen = true;
+
   void close() => isOpen = false;
 
   void focus() {
@@ -371,6 +412,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
   void _assignController() => widget.controller?._appBarState = this;
 
   late EdgeInsets insets;
+
   void _setInsets() {
     bool hasActions(List<Widget> actions) {
       final active = List.from(actions)
@@ -528,20 +570,33 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
           iconTheme: iconTheme,
         ),
         Expanded(
-          child: Stack(
-            alignment: AlignmentDirectional.centerStart,
-            children: <Widget>[
-              _buildInputField(),
-              buildGradient(isLeft: true),
-              buildGradient(isLeft: false),
-            ],
+          child: Container(
+            decoration: widget.inputDecoration,
+            margin: widget.marginContainer,
+            padding: widget.paddingContainer,
+            child: Stack(
+              alignment: AlignmentDirectional.centerStart,
+              children: <Widget>[
+                _buildInputField(),
+                buildGradient(isLeft: true),
+                buildGradient(isLeft: false),
+                Positioned(
+                    child: FloatingSearchActionBar(
+                      animation: transitionAnimation,
+                      actions: actions,
+                      iconTheme: iconTheme,
+                    ),
+                    right: 10)
+              ],
+            ),
           ),
         ),
-        FloatingSearchActionBar(
-          animation: transitionAnimation,
-          actions: actions,
-          iconTheme: iconTheme,
-        ),
+        widget.endWidget ?? const SizedBox(width: 1, height: 1)
+        // FloatingSearchActionBar(
+        //   animation: transitionAnimation,
+        //   actions: actions,
+        //   iconTheme: iconTheme,
+        // ),
       ],
     );
   }
@@ -617,7 +672,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
           input = DefaultTextStyle(
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).appBarTheme.textTheme?.headline6 ??
+            style: Theme.of(context).appBarTheme.titleTextStyle ??
                 Theme.of(context).textTheme.headline6 ??
                 const TextStyle(),
             child: input,
@@ -706,6 +761,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
 class _FloatingSearchProgressBar extends StatefulWidget {
   final dynamic progress;
   final Color color;
+
   const _FloatingSearchProgressBar({
     Key? key,
     required this.progress,
@@ -725,6 +781,7 @@ class _FloatingSearchProgressBarState extends State<_FloatingSearchProgressBar>
   )..addListener(() => setState(() {}));
 
   dynamic get progress => widget.progress;
+
   bool get showProgressBar => _controller.value > 0.0;
 
   @override

@@ -58,11 +58,8 @@ class FloatingSearchBarAction extends StatelessWidget {
   ///
   /// When the [FloatingSearchBar] opens, the hamburger
   /// transitions into a back button.
-  factory FloatingSearchBarAction.hamburgerToBack({
-    double size = 24,
-    Color? color,
-    bool isLeading = true,
-  }) {
+  factory FloatingSearchBarAction.hamburgerToBack(
+      {double size = 24, Color? color, bool isLeading = true, Widget? child}) {
     return FloatingSearchBarAction(
       showIfOpened: true,
       builder: (context, animation) {
@@ -77,19 +74,20 @@ class FloatingSearchBarAction extends StatelessWidget {
               Scaffold.of(context).openDrawer();
             }
           },
-          icon: RotatedBox(
-            quarterTurns: (isLTR ? 0 : 2) + (isLeading ? 0 : 2),
-            child: AnimatedIcon(
-              icon: AnimatedIcons.menu_arrow,
-              // Menu arrow has some weird errors on LTR...
-              // Always use LTR and rotate the widget manually
-              // for now.
-              textDirection: TextDirection.ltr,
-              progress: animation,
-              color: color,
-              size: size,
-            ),
-          ),
+          icon: child ??
+              RotatedBox(
+                quarterTurns: (isLTR ? 0 : 2) + (isLeading ? 0 : 2),
+                child: AnimatedIcon(
+                  icon: AnimatedIcons.menu_arrow,
+                  // Menu arrow has some weird errors on LTR...
+                  // Always use LTR and rotate the widget manually
+                  // for now.
+                  textDirection: TextDirection.ltr,
+                  progress: animation,
+                  color: color,
+                  size: size,
+                ),
+              ),
         );
       },
     );
@@ -198,6 +196,7 @@ class FloatingSearchActionBar extends StatelessWidget {
   final Animation<double> animation;
   final List<Widget> actions;
   final IconThemeData? iconTheme;
+
   const FloatingSearchActionBar({
     Key? key,
     required this.animation,
