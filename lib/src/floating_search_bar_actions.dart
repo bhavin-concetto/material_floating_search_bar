@@ -36,6 +36,8 @@ class FloatingSearchBarAction extends StatelessWidget {
   /// bar [FloatingSearchBar] closed.
   final bool showIfClosed;
 
+  final Widget? icon;
+
   /// Creates a widget to be displayed in a row before or after the
   /// input text of a [FloatingSearchBar].
   ///
@@ -44,6 +46,7 @@ class FloatingSearchBarAction extends StatelessWidget {
     Key? key,
     this.child,
     this.builder,
+    this.icon,
     this.showIfOpened = false,
     this.showIfClosed = true,
   })  : assert(builder != null || child != null),
@@ -95,12 +98,12 @@ class FloatingSearchBarAction extends StatelessWidget {
 
   /// A search icon that transitions into a clear icon
   /// when the query of the [FloatingSearchBar] is not empty.
-  factory FloatingSearchBarAction.searchToClear({
-    double size = 24,
-    Color? color,
-    bool showIfClosed = true,
-    Duration duration = const Duration(milliseconds: 900),
-  }) {
+  factory FloatingSearchBarAction.searchToClear(
+      {double size = 24,
+      Color? color,
+      bool showIfClosed = true,
+      Duration duration = const Duration(milliseconds: 900),
+      Widget? icon}) {
     return FloatingSearchBarAction(
       showIfOpened: true,
       showIfClosed: showIfClosed,
@@ -125,6 +128,7 @@ class FloatingSearchBarAction extends StatelessWidget {
                       !bar.isOpen || (!bar.hasFocus && bar.isAlwaysOpened);
                 }
               },
+              icon: icon,
             );
           },
         );

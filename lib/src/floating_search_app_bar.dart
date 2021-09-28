@@ -150,6 +150,8 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
 
   final Widget? endWidget;
 
+  final Gradient? decoration;
+
   const FloatingSearchAppBar(
       {Key? key,
       Duration implicitDuration = const Duration(milliseconds: 500),
@@ -195,7 +197,8 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
       this.inputDecoration,
       this.marginContainer,
       this.paddingContainer,
-      this.endWidget})
+      this.endWidget,
+      this.decoration})
       : assert(progress == null || (progress is num || progress is bool)),
         super(key, implicitDuration, implicitCurve);
 
@@ -445,6 +448,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
 
   @override
   Widget build(BuildContext context) {
+    print('is appbar $isAppBar');
     if (isAppBar) {
       return _buildAppBar();
     } else {
@@ -531,6 +535,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         child: Container(
           height: style.height + statusBarHeight,
           padding: style.padding.add(EdgeInsets.only(top: statusBarHeight)),
+          decoration: BoxDecoration(gradient: widget.decoration),
           child: _buildInputAndActions(),
         ),
       ),
@@ -655,12 +660,12 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
             hintText: widget.hint,
             hintStyle: style.hintStyle,
             contentPadding: EdgeInsets.zero,
-            border: InputBorder.none,
-            errorBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            focusedErrorBorder: InputBorder.none,
+            // border: InputBorder.none,
+            // errorBorder: InputBorder.none,
+            // enabledBorder: InputBorder.none,
+            // focusedBorder: InputBorder.none,
+            // disabledBorder: InputBorder.none,
+            // focusedErrorBorder: InputBorder.none,
           ),
         ),
       );

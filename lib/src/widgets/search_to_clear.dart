@@ -14,6 +14,7 @@ class SearchToClear extends StatelessWidget {
   final VoidCallback onTap;
   final Color? color;
   final double size;
+  final Widget? icon;
 
   /// Creates a Widget that animates between a search and
   /// a clear icon.
@@ -23,6 +24,7 @@ class SearchToClear extends StatelessWidget {
     required this.onTap,
     this.duration = const Duration(milliseconds: 500),
     this.color,
+    this.icon,
     this.size = 24.0,
   }) : super(key: key);
 
@@ -34,13 +36,14 @@ class SearchToClear extends StatelessWidget {
       builder: (context, value) {
         return CircularButton(
           onPressed: onTap,
-          icon: CustomPaint(
-            size: Size.square(size),
-            painter: _SearchToClearPainter(
-              color ?? Theme.of(context).iconTheme.color ?? Colors.black,
-              value,
-            ),
-          ),
+          icon: icon ??
+              CustomPaint(
+                size: Size.square(size),
+                painter: _SearchToClearPainter(
+                  color ?? Theme.of(context).iconTheme.color ?? Colors.black,
+                  value,
+                ),
+              ),
         );
       },
     );

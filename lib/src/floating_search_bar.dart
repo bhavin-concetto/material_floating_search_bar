@@ -355,6 +355,8 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
 
   final Widget? endWidget;
 
+  final Gradient? decoration;
+
   const FloatingSearchBar(
       {Key? key,
       Duration implicitDuration = const Duration(milliseconds: 600),
@@ -410,7 +412,8 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
       this.inputDecoration,
       this.marginContainer,
       this.paddingContainer,
-      this.endWidget})
+      this.endWidget,
+      this.decoration})
       : super(key, implicitDuration, implicitCurve);
 
   @override
@@ -674,10 +677,10 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
             padding: EdgeInsets.only(top: padding.top, bottom: padding.bottom),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: transition.lerpBackgroundColor(),
-              border: Border.fromBorderSide(style.border),
-              borderRadius: borderRadius,
-            ),
+                // color: transition.lerpBackgroundColor(),
+                border: Border.fromBorderSide(style.border),
+                borderRadius: borderRadius,
+                gradient: widget.decoration),
             child: ClipRRect(
               borderRadius: borderRadius,
               child: _buildInnerBar(),
@@ -713,13 +716,15 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
 
   Widget _buildInnerBar() {
     final textField = FloatingSearchAppBar(
+        decoration: widget.decoration,
         showCursor: widget.showCursor,
         body: null,
         key: barKey,
         height: 1000,
         elevation: 0.0,
         controller: widget.controller,
-        color: transition.lerpBackgroundColor(),
+        // color: transition.lerpBackgroundColor(),
+        //  color: Colors.cyan,
         onFocusChanged: (isFocused) {
           isOpen = isFocused;
           widget.onFocusChanged?.call(isFocused);
@@ -776,7 +781,8 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
             shadowColor: style.shadowColor,
             child: Container(
               height: style.height,
-              color: transition.lerpBackgroundColor(),
+              color: Colors.amber,
+              // color: transition.lerpBackgroundColor(),
               alignment: Alignment.topCenter,
               child: Stack(
                 alignment: Alignment.center,
@@ -866,7 +872,8 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
       axisAlignment: widget.axisAlignment ?? 0.0,
       openAxisAlignment:
           widget.openAxisAlignment ?? widget.axisAlignment ?? 0.0,
-      backgroundColor: widget.backgroundColor ?? theme.cardColor,
+      // backgroundColor: widget.backgroundColor ?? theme.cardColor,
+      backgroundColor: Colors.green,
       shadowColor: widget.shadowColor ?? Colors.black45,
       backdropColor: widget.backdropColor ??
           widget.transition?.backdropColor ??
