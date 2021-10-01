@@ -11,6 +11,7 @@ typedef OnFocusChangedCallback = void Function(bool isFocused);
 ///
 /// This can be considered the base Widget for the full
 /// [FloatingSearchBar].
+///
 class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
   /// to show the cursor or not
   final bool showCursor;
@@ -614,14 +615,14 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         child: Container(
           width: isLeft ? insets.left : insets.right,
           height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                backgroundColor.withOpacity(0.0),
-                backgroundColor.withOpacity(1.0),
-              ],
-            ),
-          ),
+          // decoration: BoxDecoration(
+          //   gradient: LinearGradient(
+          //     colors: [
+          //       backgroundColor.withOpacity(0.0),
+          //       backgroundColor.withOpacity(1.0),
+          //     ],
+          //   ),
+          // ),
         ),
       ),
     );

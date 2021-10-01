@@ -626,7 +626,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
           child: ValueListenableBuilder(
             valueListenable: rebuilder,
             builder: (context, __, _) => AnimatedBuilder(
-              animation: animation,
+               animation: animation,
               builder: (context, _) => Stack(
                 children: <Widget>[
                   _buildBackdrop(),
