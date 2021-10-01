@@ -151,7 +151,7 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
 
   final Widget? endWidget;
 
-  final Gradient? decoration;
+  final BoxDecoration? decoration;
 
   const FloatingSearchAppBar(
       {Key? key,
@@ -536,7 +536,7 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         child: Container(
           height: style.height + statusBarHeight,
           padding: style.padding.add(EdgeInsets.only(top: statusBarHeight)),
-          decoration: BoxDecoration(gradient: widget.decoration),
+          decoration: widget.decoration,
           child: _buildInputAndActions(),
         ),
       ),

@@ -99,7 +99,8 @@ class _HomeState extends State<Home> {
       ),
     ];
 
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Consumer<SearchModel>(
       builder: (context, model, _) => FloatingSearchBar(
@@ -204,7 +205,8 @@ class _HomeState extends State<Home> {
                       const SizedBox(height: 2),
                       Text(
                         place.level2Address,
-                        style: textTheme.bodyText2.copyWith(color: Colors.grey.shade600),
+                        style: textTheme.bodyText2
+                            .copyWith(color: Colors.grey.shade600),
                       ),
                     ],
                   ),

@@ -355,7 +355,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
 
   final Widget? endWidget;
 
-  final Gradient? decoration;
+  final BoxDecoration? decoration;
 
   const FloatingSearchBar(
       {Key? key,
@@ -626,7 +626,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
           child: ValueListenableBuilder(
             valueListenable: rebuilder,
             builder: (context, __, _) => AnimatedBuilder(
-               animation: animation,
+              animation: animation,
               builder: (context, _) => Stack(
                 children: <Widget>[
                   _buildBackdrop(),
@@ -676,11 +676,10 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
             height: transition.lerpHeight(),
             padding: EdgeInsets.only(top: padding.top, bottom: padding.bottom),
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-                // color: transition.lerpBackgroundColor(),
-                border: Border.fromBorderSide(style.border),
-                borderRadius: borderRadius,
-                gradient: widget.decoration),
+            // decoration:widget.decoration ?? BoxDecoration(
+            //     // color: transition.lerpBackgroundColor(),
+            //     border: Border.fromBorderSide(style.border),
+            //     borderRadius: borderRadius),
             child: ClipRRect(
               borderRadius: borderRadius,
               child: _buildInnerBar(),

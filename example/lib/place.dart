@@ -50,7 +50,10 @@ class Place {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is Place && o.name == name && o.state == state && o.country == country;
+    return o is Place &&
+        o.name == name &&
+        o.state == state &&
+        o.country == country;
   }
 
   @override
