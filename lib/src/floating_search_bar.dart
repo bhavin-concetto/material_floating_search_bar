@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-import 'floating_search_bar_actions.dart';
 import 'floating_search_bar_dismissable.dart';
 import 'floating_search_bar_transition.dart';
 import 'search_bar_style.dart';
@@ -568,7 +567,9 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
     _offset = 0.0;
 
     if (!widget.isScrollControlled) {
-      _scrollController.jumpTo(0.0);
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(0.0);
+      }
     }
   }
 
